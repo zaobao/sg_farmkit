@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.1
+// @version     1.1.1
 // @grant       none
 // ==/UserScript==
 
@@ -86,7 +86,8 @@ for (var i = 0, isReply = 0; i < postNodes.length; i++) {
 						var tds = this.divPElement.parentNode.parentNode.parentNode.getElementsByTagName("td");
 						for (var k = 0; k < tds.length; k++) {
 							if (tds[k].getAttribute("id").match("postmessage_")) {
-								postText = tds[k].innerText || tds[k].textContent || tds[k].text;
+								postText = (tds[k].innerText || tds[k].textContent || tds[k].text)
+									.replace(/(^\s*)|(\s*$)/g, "").split("\n").pop();
 								if (postText[0] == "\n") {
 									postText = postText.slice(1);
 								}
