@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.1.1
+// @version     1.1.2
 // @grant       none
 // ==/UserScript==
 
@@ -72,18 +72,24 @@ for (var i = 0, isReply = 0; i < postNodes.length; i++) {
 					divs[j].appendChild(span);
 					divs[j].appendChild(document.createTextNode("\n"));
 					var farmArchor = document.createElement("a");
+					var speedFarmText = document.createElement
 					farmArchor.innerHTML = "快速伐木";
-					farmArchor.style.color = "green";
-					farmArchor.style.cursor = "pointer";
-					farmArchor.style.cssFloat = "right";
-					farmArchor.style.lineHeight = "16px";
-					farmArchor.style.padding = "0px 6px";
+					farmArchor.style.cssText = "color: green; cursor: pointer; float: right; line-height: 16px; padding: 0px 6px; -moz-user-select:none; -webkit-user-select:none; user-select:none;";
 					divs[j].appendChild(farmArchor);
 					divs[j].appendChild(document.createTextNode("\n"));
 					farmArchor.divPElement = divs[j];
 					farmArchor.onclick = function () {
 						var postText = "伐木伐木";
 						var tds = this.divPElement.parentNode.parentNode.parentNode.getElementsByTagName("td");
+						var selection = window.getSelection();
+						if (selection != null) {
+							selectionText = selection.toString();
+						}
+						if (selectionText != null && selectionText.length > 0) {
+							postText = selectionText;
+							fastfarm(postText);
+							return false;
+						}
 						for (var k = 0; k < tds.length; k++) {
 							if (tds[k].getAttribute("id").match("postmessage_")) {
 								postText = (tds[k].innerText || tds[k].textContent || tds[k].text)
@@ -95,6 +101,7 @@ for (var i = 0, isReply = 0; i < postNodes.length; i++) {
 							}
 						}
 						fastfarm(postText);
+						return false;
 					}
 				}
 			}
