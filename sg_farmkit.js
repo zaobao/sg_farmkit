@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.2
+// @version     1.2.1
 // @grant       none
 // ==/UserScript==
 
@@ -68,7 +68,7 @@ function precensoreFastForm(formName) {
 })();
 
 function fastfarm(replyStr) {
-	document.getElementById("fastpostmessage").value = replyStr;
+	document.getElementById("fastpostmessage").value = precensore(recoverText(replyStr));
 	document.getElementById("fastpostform").submit();
 }
 
