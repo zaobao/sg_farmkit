@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.2.1
+// @version     1.2.2
 // @grant       none
 // ==/UserScript==
 
@@ -12,12 +12,14 @@ var pcrr = {
 	"枪": "&#x67AA;",
 	"弹": "&#x5F39;",
 	"性": "&#x6027;",
-	"毒": "&#x6BD2;"
+	"毒": "&#x6BD2;",
+	"裸": "&#x88F8;"
 }
 
 var rrr = {
 	"(核)\\*": "$1弹",
-	"\\*(龙)": "毒$2"
+	"\\*(龙)": "毒$1",
+	"\\*(照)": "裸$1"
 }
 
 var fastFormNames = ["fastpostform", "vfastpostform"];
