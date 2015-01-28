@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.2.2
+// @version     1.2.3
 // @grant       none
 // ==/UserScript==
 
@@ -13,22 +13,52 @@ var pcrr = {
 	"弹": "&#x5F39;",
 	"性": "&#x6027;",
 	"毒": "&#x6BD2;",
-	"裸": "&#x88F8;"
+	"裸": "&#x88F8;",
+	"仇": "&#x4EC7;"
 }
 
 var rrr = {
+	"(世界|历史|人|个|女)\\*": "$1性",
+	"(躺)\\*": "$1枪",
 	"(核)\\*": "$1弹",
-	"\\*(龙)": "毒$1",
+	"\\*(情)": "性$1",
+	"\\*(龙|镖)": "毒$1",
+	"\\*(恨)": "仇$1",
+	"\\*(幕)": "弹$1",
 	"\\*(照)": "裸$1"
 }
 
 var fastFormNames = ["fastpostform", "vfastpostform"];
+
+function getCookie(c_name) {
+	if (document.cookie.length > 0) {
+		c_start = document.cookie.indexOf(c_name + "=");
+		if (c_start != -1) { 
+			c_start = c_start + c_name.length + 1 ;
+			c_end = document.cookie.indexOf(";", c_start);
+			if (c_end == -1) {
+				c_end = document.cookie.length;
+			}
+			return unescape(document.cookie.substring(c_start, c_end));
+		} 
+	}
+	return "";
+}
+
+function setCookie (c_name, value, expiresecs) {
+	var exdate = new Date();
+	exdate.setSeconds(exdate.getSeconds() + expiresecs);
+	document.cookie = c_name + "=" + escape(value) + ((expiresecs == null) ? "" : ";expires=" + exdate.toGMTString());
+}
 
 function precensore (str) {
 	if (str) {
 		for (var ch in pcrr) {
 			str = str.replace(new RegExp(ch, "ig"), pcrr[ch]);
 		}
+	}
+	if (str.length < 10) {
+		str = str + "          ";
 	}
 	return str;
 }
@@ -69,8 +99,50 @@ function precensoreFastForm(formName) {
 	}
 })();
 
+function onNeedMoreTime() {
+	if (document.getElementById('ntcwin')) {
+		var ntcwin = document.getElementById('ntcwin');
+	} else {
+		var ntcwin = document.createElement('div');
+		ntcwin.id = "ntcwin";
+		ntcwin.className = "popuptext";
+		ntcwin.style.cssText = "position: fixed; z-index: 501; left: 466.5px; top: 30px; display: none;";
+		document.getElementById("append_parent").appendChild(ntcwin);
+		var table = document.createElement("table");
+		table.className = "popupcredit";
+		table.cellspacing = "0";
+		table.cellpadding = "0";
+		ntcwin.appendChild(table);
+		var tr = document.createElement("tr");
+		table.appendChild(tr);
+		var tdl = document.createElement("td");
+		tdl.className = "pc_l";
+		tr.appendChild(tdl);
+		var tdc = document.createElement("td");
+		tdc.className = "pc_c";
+		tr.appendChild(tdc);
+		var tdr = document.createElement("td");
+		tdr.className = "pc_r";
+		tr.appendChild(tdr);
+		var div_inner = document.createElement("div");
+		div_inner.className = "pc_inner";
+		tdc.appendChild(div_inner);
+		var i_text = document.createElement("i");
+		i_text.innerHTML = "抱歉，您两次发表间隔少于 15 秒，请稍候再发表";
+		div_inner.appendChild(i_text);
+	}
+	document.getElementById('ntcwin').style.display = "block";
+	setTimeout(function () {
+		document.getElementById('ntcwin').style.display = "none";
+	}, 2500);
+}
 function fastfarm(replyStr) {
+	if (getCookie("SG_farmkit_ifPostTimeLimit")) {
+		onNeedMoreTime();
+		return;
+	}
 	document.getElementById("fastpostmessage").value = precensore(recoverText(replyStr));
+	setCookie("SG_farmkit_ifPostTimeLimit", "1", 15);
 	document.getElementById("fastpostform").submit();
 }
 
