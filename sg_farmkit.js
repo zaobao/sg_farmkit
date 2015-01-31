@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.2.3
+// @version     1.2.4
 // @grant       none
 // ==/UserScript==
 
@@ -18,7 +18,7 @@ var pcrr = {
 }
 
 var rrr = {
-	"(世界|历史|人|个|女)\\*": "$1性",
+	"(可能|世界|历史|人|个|女|属|理)\\*": "$1性",
 	"(躺)\\*": "$1枪",
 	"(核)\\*": "$1弹",
 	"\\*(情)": "性$1",
@@ -136,13 +136,14 @@ function onNeedMoreTime() {
 		document.getElementById('ntcwin').style.display = "none";
 	}, 2500);
 }
+
 function fastfarm(replyStr) {
 	if (getCookie("SG_farmkit_ifPostTimeLimit")) {
 		onNeedMoreTime();
 		return;
 	}
 	document.getElementById("fastpostmessage").value = precensore(recoverText(replyStr));
-	setCookie("SG_farmkit_ifPostTimeLimit", "1", 15);
+	setCookie("SG_farmkit_ifPostTimeLimit", "1", 16);
 	document.getElementById("fastpostform").submit();
 }
 
