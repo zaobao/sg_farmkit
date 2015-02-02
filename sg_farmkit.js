@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.2.4
+// @version     1.2.5
 // @grant       none
 // ==/UserScript==
 
@@ -19,10 +19,11 @@ var pcrr = {
 
 var rrr = {
 	"(可能|世界|历史|人|个|女|属|理)\\*": "$1性",
-	"(躺)\\*": "$1枪",
-	"(核)\\*": "$1弹",
-	"\\*(情)": "性$1",
-	"\\*(龙|镖)": "毒$1",
+	"(躺|火)\\*": "$1枪",
+	"(核|炸)\\*": "$1弹",
+	"(意)\\*": "$1淫",
+	"\\*(情|格)": "性$1",
+	"\\*(龙|镖|瘤)": "毒$1",
 	"\\*(恨)": "仇$1",
 	"\\*(幕)": "弹$1",
 	"\\*(照)": "裸$1"
@@ -51,6 +52,9 @@ function setCookie (c_name, value, expiresecs) {
 	document.cookie = c_name + "=" + escape(value) + ((expiresecs == null) ? "" : ";expires=" + exdate.toGMTString());
 }
 
+function setTimeLimit() {
+	setCookie("SG_farmkit_ifPostTimeLimit", "1", 16);
+}
 function precensore (str) {
 	if (str) {
 		for (var ch in pcrr) {
@@ -77,6 +81,7 @@ function precensoreFastForm(formName) {
 	if (form) {
 		form.onsubmit = function (e) {
 			this.message.value = parseurl(precensore(this.message.value));
+			setTimeLimit();
 			ajaxpost(formName, 'return_reply', 'return_reply', 'onerror');
 			return false;
 		}
@@ -143,9 +148,14 @@ function fastfarm(replyStr) {
 		return;
 	}
 	document.getElementById("fastpostmessage").value = precensore(recoverText(replyStr));
-	setCookie("SG_farmkit_ifPostTimeLimit", "1", 16);
+	setTimeLimit();
 	document.getElementById("fastpostform").submit();
 }
+
+(function () {
+	var ih = document.getElementById("thread_subject").innerHTML;
+	document.getElementById("thread_subject").innerHTML = recoverText(ih);
+})();
 
 (function () {
 	var postlist = document.getElementById("postlist");
