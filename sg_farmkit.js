@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.2.5
+// @version     1.2.6
 // @grant       none
 // ==/UserScript==
 
@@ -18,15 +18,17 @@ var pcrr = {
 }
 
 var rrr = {
+	"(显示器)\\*\\*": "$1杀手",
+	"\\*(幕)": "弹$1",
 	"(可能|世界|历史|人|个|女|属|理)\\*": "$1性",
 	"(躺|火)\\*": "$1枪",
 	"(核|炸)\\*": "$1弹",
 	"(意)\\*": "$1淫",
-	"\\*(情|格)": "性$1",
+	"\\*(情|格|感)": "性$1",
 	"\\*(龙|镖|瘤)": "毒$1",
 	"\\*(恨)": "仇$1",
-	"\\*(幕)": "弹$1",
-	"\\*(照)": "裸$1"
+	"\\*(照)": "裸$1",
+	"\\*(妇)": "淫$1"
 }
 
 var fastFormNames = ["fastpostform", "vfastpostform"];
@@ -151,6 +153,11 @@ function fastfarm(replyStr) {
 	setTimeLimit();
 	document.getElementById("fastpostform").submit();
 }
+
+(function () {
+	var tt = document.title;
+	document.title = recoverText(tt);
+})();
 
 (function () {
 	var ih = document.getElementById("thread_subject").innerHTML;
