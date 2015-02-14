@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.3.1
+// @version     1.3.2
 // @grant       none
 // ==/UserScript==
 
@@ -101,18 +101,18 @@ function replaceFace(e) {
 	for (var i = 0; i < nodes.length; i++) {
 		if (nodes[i].nodeName && nodes[i].nodeName.toLowerCase() == "img") {
 			var smilieid = nodes[i].getAttribute("smilieid");
-			if (smilieid) {
-				if (smilieid >= 85 && smilieid <= 137) {
-					e.replaceChild(document.createTextNode("{:" + smilieid + ":}"), nodes[i]);
-				} else if (smilieid >= 343 && smilieid <= 419) {
-					e.replaceChild(document.createTextNode("{:6_" + smilieid + ":}"), nodes[i]);
-				} else if (smilieid == 169 || smilieid == 177 || smilieid == 170 || smilieid == 178) {
-					e.replaceChild(document.createTextNode("{:3_" + smilieid + ":}"), nodes[i]);
-				} else if (smilieid >= 171 && smilieid <= 176 || smilieid >= 179 && smilieid <= 181) {
-					e.replaceChild(document.createTextNode("{:7_" + smilieid + ":}"), nodes[i]);
-				} else if (smilieid >= 168 && smilieid <= 276) {
-					e.replaceChild(document.createTextNode("{:5_" + smilieid + ":}"), nodes[i]);
-				}
+			if (smilieid >= 85 && smilieid <= 137) {
+				e.replaceChild(document.createTextNode("{:" + smilieid + ":}"), nodes[i]);
+			} else if (smilieid >= 343 && smilieid <= 419) {
+				e.replaceChild(document.createTextNode("{:6_" + smilieid + ":}"), nodes[i]);
+			} else if (smilieid == 169 || smilieid == 177 || smilieid == 170 || smilieid == 178) {
+				e.replaceChild(document.createTextNode("{:3_" + smilieid + ":}"), nodes[i]);
+			} else if (smilieid >= 171 && smilieid <= 176 || smilieid >= 179 && smilieid <= 181) {
+				e.replaceChild(document.createTextNode("{:7_" + smilieid + ":}"), nodes[i]);
+			} else if (smilieid >= 168 && smilieid <= 276) {
+				e.replaceChild(document.createTextNode("{:5_" + smilieid + ":}"), nodes[i]);
+			} else {
+				e.replaceChild(document.createTextNode("[img=" + nodes[i].width + "," + nodes[i].height + "]" + nodes[i].src + "[/img]"), nodes[i]);
 			}
 		}
 	}
@@ -246,6 +246,7 @@ function fastfarm(replyStr) {
 								}
 							}
 							fastfarm(postText);
+							return false;
 						}
 					}
 				}
@@ -272,12 +273,15 @@ function fastfarm(replyStr) {
 							var postText = "伐木伐木";
 							var tds = this.divPElement.parentNode.parentNode.parentNode.getElementsByTagName("td");
 							var selection = window.getSelection();
-							var focusOffset = selection.focusOffset;
-							var anchorOffset = selection.anchorOffset
-							replaceFace(selection.anchorNode.parentNode);
-							selection.focusOffset = focusOffset;
-							selection.anchorOffset = anchorOffset;
-							if (selection != null) {
+							var selectionText;
+							if (selection != null && !selection.isCollapsed) {
+								var focusNode = selection.focusNode;
+								var focusOffset = selection.focusOffset;
+								var anchorNode = selection.anchorNode;
+								var anchorOffset = selection.anchorOffset
+								replaceFace(selection.anchorNode.parentNode);
+								selection.collapse(anchorNode, anchorOffset);
+								selection.extend(focusNode, focusOffset);
 								selectionText = selection.toString();
 							}
 							if (selectionText != null && selectionText.length > 0) {
