@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.2.6
+// @version     1.3
 // @grant       none
 // ==/UserScript==
 
@@ -14,21 +14,26 @@ var pcrr = {
 	"性": "&#x6027;",
 	"毒": "&#x6BD2;",
 	"裸": "&#x88F8;",
-	"仇": "&#x4EC7;"
+	"仇": "&#x4EC7;",
+	"奸": "&#x5978;",
+	"淫": "&#x6DEB;"
 }
 
 var rrr = {
+	"(不共戴天之)\\*": "$1仇",
 	"(显示器)\\*\\*": "$1杀手",
 	"\\*(幕)": "弹$1",
-	"(可能|世界|历史|人|个|女|属|理)\\*": "$1性",
 	"(躺|火)\\*": "$1枪",
 	"(核|炸)\\*": "$1弹",
+	"(剧)\\*": "$1毒",
 	"(意)\\*": "$1淫",
+	"(汉)\\*": "$1奸",
 	"\\*(情|格|感)": "性$1",
-	"\\*(龙|镖|瘤)": "毒$1",
+	"\\*(龙|镖|瘤|奶)": "毒$1",
 	"\\*(恨)": "仇$1",
 	"\\*(照)": "裸$1",
-	"\\*(妇)": "淫$1"
+	"\\*(妇)": "淫$1",
+	"(可能|世界|历史|人|个|女|属|理|局限|专业|进攻|本)\\*": "$1性"
 }
 
 var fastFormNames = ["fastpostform", "vfastpostform"];
@@ -57,6 +62,7 @@ function setCookie (c_name, value, expiresecs) {
 function setTimeLimit() {
 	setCookie("SG_farmkit_ifPostTimeLimit", "1", 16);
 }
+
 function precensore (str) {
 	if (str) {
 		for (var ch in pcrr) {
@@ -86,6 +92,28 @@ function precensoreFastForm(formName) {
 			setTimeLimit();
 			ajaxpost(formName, 'return_reply', 'return_reply', 'onerror');
 			return false;
+		}
+	}
+}
+
+function replaceFace(e) {
+	var nodes = e.childNodes;
+	for (var i = 0; i < nodes.length; i++) {
+		if (nodes[i].nodeName && nodes[i].nodeName.toLowerCase() == "img") {
+			var smilieid = nodes[i].getAttribute("smilieid");
+			if (smilieid) {
+				if (smilieid >= 85 && smilieid <= 137) {
+					e.replaceChild(document.createTextNode("{:" + smilieid + ":}"), nodes[i]);
+				} else if (smilieid >= 343 && smilieid <= 419) {
+					e.replaceChild(document.createTextNode("{:6_" + smilieid + ":}"), nodes[i]);
+				} else if (smilieid == 169 || smilieid == 177 || smilieid == 170 || smilieid == 178) {
+					e.replaceChild(document.createTextNode("{:3_" + smilieid + ":}"), nodes[i]);
+				} else if (smilieid >= 171 && smilieid <= 176 || smilieid >= 179 && smilieid <= 181) {
+					e.replaceChild(document.createTextNode("{:7_" + smilieid + ":}"), nodes[i]);
+				} else if (smilieid >= 168 && smilieid <= 276) {
+					e.replaceChild(document.createTextNode("{:5_" + smilieid + ":}"), nodes[i]);
+				}
+			}
 		}
 	}
 }
@@ -209,7 +237,8 @@ function fastfarm(replyStr) {
 							var tds = this.divPElement.parentNode.parentNode.parentNode.getElementsByTagName("td");
 							for (var k = 0; k < tds.length; k++) {
 								if (tds[k].getAttribute("id").match("postmessage_")) {
-									postText = tds[k].innerText || tds[k].textContent || tds[k].text;
+									replaceFace(tds[k]);
+									postText = (tds[k].innerText || tds[k].textContent || tds[k].text).replace(/^\s*/g, "");
 									if (postText[0] == "\n") {
 										postText = postText.slice(1);
 									}
@@ -253,6 +282,7 @@ function fastfarm(replyStr) {
 							}
 							for (var k = 0; k < tds.length; k++) {
 								if (tds[k].getAttribute("id").match("postmessage_")) {
+									replaceFace(tds[k]);
 									postText = (tds[k].innerText || tds[k].textContent || tds[k].text)
 										.replace(/(^\s*)|(\s*$)/g, "").split("\n").pop();
 									if (postText[0] == "\n") {
