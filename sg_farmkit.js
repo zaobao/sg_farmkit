@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.3
+// @version     1.3.1
 // @grant       none
 // ==/UserScript==
 
@@ -272,6 +272,11 @@ function fastfarm(replyStr) {
 							var postText = "伐木伐木";
 							var tds = this.divPElement.parentNode.parentNode.parentNode.getElementsByTagName("td");
 							var selection = window.getSelection();
+							var focusOffset = selection.focusOffset;
+							var anchorOffset = selection.anchorOffset
+							replaceFace(selection.anchorNode.parentNode);
+							selection.focusOffset = focusOffset;
+							selection.anchorOffset = anchorOffset;
 							if (selection != null) {
 								selectionText = selection.toString();
 							}
