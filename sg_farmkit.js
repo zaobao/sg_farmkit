@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.3.2
+// @version     1.3.3
 // @grant       none
 // ==/UserScript==
 
@@ -29,7 +29,7 @@ var rrr = {
 	"(意)\\*": "$1淫",
 	"(汉)\\*": "$1奸",
 	"\\*(情|格|感)": "性$1",
-	"\\*(龙|镖|瘤|奶)": "毒$1",
+	"\\*(龙|镖|瘤|奶|狗)": "毒$1",
 	"\\*(恨)": "仇$1",
 	"\\*(照)": "裸$1",
 	"\\*(妇)": "淫$1",
@@ -233,6 +233,10 @@ function fastfarm(replyStr) {
 						divs[j].appendChild(document.createTextNode("\n"));
 						farmArchor.divPElement = divs[j];
 						farmArchor.onclick = function () {
+							if (getCookie("SG_farmkit_ifPostTimeLimit")) {
+								onNeedMoreTime();
+								return false;
+							}
 							var postText = "伐木伐木";
 							var tds = this.divPElement.parentNode.parentNode.parentNode.getElementsByTagName("td");
 							for (var k = 0; k < tds.length; k++) {
@@ -270,6 +274,10 @@ function fastfarm(replyStr) {
 						divs[j].appendChild(document.createTextNode("\n"));
 						farmArchor.divPElement = divs[j];
 						farmArchor.onclick = function () {
+							if (getCookie("SG_farmkit_ifPostTimeLimit")) {
+								onNeedMoreTime();
+								return false;
+							}
 							var postText = "伐木伐木";
 							var tds = this.divPElement.parentNode.parentNode.parentNode.getElementsByTagName("td");
 							var selection = window.getSelection();
