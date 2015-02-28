@@ -4,9 +4,14 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.3.4
+// @version     1.9.9
 // @grant       none
 // ==/UserScript==
+
+var devmode = false;
+if (devmode) {
+	var timestamp = new Date();
+}
 
 var pcrr = {
 	"枪": "&#x67AA;",
@@ -20,7 +25,7 @@ var pcrr = {
 }
 
 var rrr = {
-	"(不共戴天之)\\*": "$1仇",
+	"(不共戴天之|复)\\*": "$1仇",
 	"(显示器)\\*\\*": "$1杀手",
 	"\\*(幕)": "弹$1",
 	"(躺|火)\\*": "$1枪",
@@ -34,10 +39,20 @@ var rrr = {
 	"\\*(照)": "裸$1",
 	"\\*(妇)": "淫$1",
 	"\\*(臣)": "奸$1",
-	"(任|可能|世界|历史|人|个|女|属|理|局限|专业|进攻|本|选择|关键|重要|习惯|灵)\\*": "$1性"
+	"(任|可能|世界|历史|人|个|女|属|理|局限|专业|进攻|本|选择|关键|重要|习惯|灵|观赏|记|惰|理)\\*": "$1性"
 }
 
 var fastFormNames = ["fastpostform", "vfastpostform"];
+
+function isParent(obj, parentObj){
+	while (obj != undefined && obj != null && obj.tagName.toUpperCase() != 'BODY') {
+		if (obj == parentObj){
+			return true;
+		}
+		obj = obj.parentNode;
+	}
+	return false;
+} 
 
 function getCookie(c_name) {
 	if (document.cookie.length > 0) {
@@ -211,6 +226,13 @@ function fastfarm(replyStr) {
 					tds[k].innerHTML = recoverText(tds[k].innerHTML);
 				}
 			}
+			var fastre = null;
+			var as = postNode.getElementsByTagName("a");
+			for (var k = 0; k < as.length; k++) {
+				if (as[k].className == "fastre") {
+					fastre = as[k];
+				}
+			}
 			if (isReply == 1) {
 				var divs = postNode.getElementsByTagName("div");
 				for (var j = 0; j < divs.length; j++) {
@@ -232,6 +254,35 @@ function fastfarm(replyStr) {
 						farmArchor.style.padding = "0px 6px";
 						divs[j].appendChild(farmArchor);
 						divs[j].appendChild(document.createTextNode("\n"));
+						var span1 = document.createElement("span");
+						span1.className = "pipe";
+						span1.innerHTML = "|";
+						span1.style.cssFloat = "right";
+						span1.style.lineHeight = "16px";
+						span1.style.margin = "0px 2px";
+						divs[j].appendChild(span1);
+						var replyBox = document.createElement("span");
+						var replyArchor = document.createElement("span");
+						replyBox.appendChild(replyArchor);
+						replyArchor.innerHTML = "快速回复";
+						replyBox.style.cssText = "float: right; padding: 0px 6px;"
+						replyArchor.style.cssText = "color: green; cursor: pointer; line-height: 16px;";
+						divs[j].appendChild(replyBox);
+						var fastReplyPoint = document.createElement("div");
+						fastReplyPoint.style.cssText = "overflow-x: visible; overflow-y: visible; position: relative; height: 0px; width: 0px;"; 
+						replyBox.appendChild(fastReplyPoint);
+						replyArchor.onmouseover = function () {
+							this.nextSibling.childNodes[0].style.display = "block";
+						}
+						replyArchor.onmouseout = function (e) {
+							if (isParent(e.relatedTarget, this.parentNode)) {
+								return false;
+							}
+							this.nextSibling.childNodes[0].style.display = "none";
+						}
+						fastReplyPoint.appendChild(createFastReplyBox());
+						divs[j].parentNode.parentNode.style.cssText = "overflow-x: visible; overflow-y: visible;";
+						fastReplyPoint.fastre = fastre;
 						farmArchor.divPElement = divs[j];
 						farmArchor.onclick = function () {
 							if (getCookie("SG_farmkit_ifPostTimeLimit")) {
@@ -268,11 +319,39 @@ function fastfarm(replyStr) {
 						divs[j].appendChild(span);
 						divs[j].appendChild(document.createTextNode("\n"));
 						var farmArchor = document.createElement("a");
-						var speedFarmText = document.createElement
-						farmArchor.innerHTML = "快速伐木";
+						farmArchor.innerHTML = "复制伐木";
 						farmArchor.style.cssText = "color: green; cursor: pointer; float: right; line-height: 16px; padding: 0px 6px; -moz-user-select:none; -webkit-user-select:none; user-select:none;";
 						divs[j].appendChild(farmArchor);
 						divs[j].appendChild(document.createTextNode("\n"));
+						var span1 = document.createElement("span");
+						span1.className = "pipe";
+						span1.innerHTML = "|";
+						span1.style.cssFloat = "right";
+						span1.style.lineHeight = "16px";
+						span1.style.margin = "0px 2px";
+						divs[j].appendChild(span1);
+						var replyBox = document.createElement("span");
+						var replyArchor = document.createElement("span");
+						replyBox.appendChild(replyArchor);
+						replyArchor.innerHTML = "快速回复";
+						replyBox.style.cssText = "float: right; padding: 0px 6px;"
+						replyArchor.style.cssText = "color: green; cursor: pointer; line-height: 16px;";
+						divs[j].appendChild(replyBox);
+						var fastReplyPoint = document.createElement("div");
+						fastReplyPoint.style.cssText = "overflow-x: visible; overflow-y: visible; position: relative; height: 0px; width: 0px;"; 
+						replyBox.appendChild(fastReplyPoint);
+						replyArchor.onmouseover = function () {
+							this.nextSibling.childNodes[0].style.display = "block";
+						}
+						replyArchor.onmouseout = function (e) {
+							if (isParent(e.relatedTarget, this.parentNode)) {
+								return false;
+							}
+							this.nextSibling.childNodes[0].style.display = "none";
+						}
+						fastReplyPoint.appendChild(createFastReplyBox());
+						fastReplyPoint.fastre = fastre;
+						divs[j].parentNode.parentNode.style.cssText = "overflow-x: visible; overflow-y: visible;";
 						farmArchor.divPElement = divs[j];
 						farmArchor.onclick = function () {
 							if (getCookie("SG_farmkit_ifPostTimeLimit")) {
@@ -319,3 +398,60 @@ function fastfarm(replyStr) {
 		}
 	}
 })();
+
+function createFastReplyBox() {
+	var box = document.createElement("div");
+	box.style.cssText = "height: 100px; width: 100px; display: none";
+	box.appendChild(createFastReplyItem("道理是这么个道理"));
+	box.appendChild(createFastReplyItem("妮说是就是"));
+	box.appendChild(createFastReplyItem("抽根烟，压压惊"));
+	box.appendChild(createFastReplyItem("XNMBYY"));
+	box.appendChild(createFastReplyItem("妮为什么这么毒"));
+	box.appendChild(createFastReplyItem("这件事窝已经报警"));
+	box.appendChild(createFastReplyItem("建议永丰"));
+	box.onmouseout = function (e) {
+		if (isParent(e.relatedTarget, this.parentNode.parentNode)) {
+			return false;
+		}
+		this.style.display = "none";
+	}
+	return box;
+}
+
+function createFastReplyItem(str) {
+	var item = document.createElement("div");
+	item.appendChild(document.createTextNode(str));
+	item.style.cursor = "pointer";
+	item.style.color = "gray";
+	item.onclick = function () {
+		this.parentNode.style.display = "none";
+		replyFarm(this.parentNode.parentNode.fastre.href, this.innerHTML);
+	}
+	item.onmouseover = function () {item.style.color = "green"}
+	item.onmouseout = function () {item.style.color = "gray"}
+	return item;
+}
+
+function replyFarm(url, str) {
+	if (getCookie("SG_farmkit_ifPostTimeLimit")) {
+		onNeedMoreTime();
+		return;
+	}
+	var reply_box = document.createElement("div");
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", url + "&infloat=yes&handlekey=reply&inajax=1&ajaxtarget=fwin_content_reply",true);
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+			reply_box.innerHTML = xmlhttp.responseXML.documentElement.childNodes[0].data;
+			document.getElementById("postform").message.value = precensore(recoverText(str));
+			setTimeLimit();
+			document.getElementById("postform").submit();
+		}
+	}
+	xmlhttp.send();
+	document.body.appendChild(reply_box);
+}
+
+if (devmode) {
+	alert("耗时：" + (new Date().getTime() - timestamp.getTime()) + "毫秒");
+}
