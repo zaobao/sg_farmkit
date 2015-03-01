@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     1.9.9
+// @version     2.0.0
 // @grant       none
 // ==/UserScript==
 
@@ -271,14 +271,14 @@ function fastfarm(replyStr) {
 						var fastReplyPoint = document.createElement("div");
 						fastReplyPoint.style.cssText = "overflow-x: visible; overflow-y: visible; position: relative; height: 0px; width: 0px;"; 
 						replyBox.appendChild(fastReplyPoint);
-						replyArchor.onmouseover = function () {
-							this.nextSibling.childNodes[0].style.display = "block";
+						replyBox.onmouseover = function () {
+							this.childNodes[1].childNodes[0].style.display = "block";
 						}
-						replyArchor.onmouseout = function (e) {
-							if (isParent(e.relatedTarget, this.parentNode)) {
+						replyBox.onmouseout = function (e) {
+							if (isParent(e.relatedTarget, this)) {
 								return false;
 							}
-							this.nextSibling.childNodes[0].style.display = "none";
+							this.childNodes[1].childNodes[0].style.display = "none";
 						}
 						fastReplyPoint.appendChild(createFastReplyBox());
 						divs[j].parentNode.parentNode.style.cssText = "overflow-x: visible; overflow-y: visible;";
@@ -340,14 +340,14 @@ function fastfarm(replyStr) {
 						var fastReplyPoint = document.createElement("div");
 						fastReplyPoint.style.cssText = "overflow-x: visible; overflow-y: visible; position: relative; height: 0px; width: 0px;"; 
 						replyBox.appendChild(fastReplyPoint);
-						replyArchor.onmouseover = function () {
-							this.nextSibling.childNodes[0].style.display = "block";
+						replyBox.onmouseover = function () {
+							this.childNodes[1].childNodes[0].style.display = "block";
 						}
-						replyArchor.onmouseout = function (e) {
-							if (isParent(e.relatedTarget, this.parentNode)) {
+						replyBox.onmouseout = function (e) {
+							if (isParent(e.relatedTarget, this)) {
 								return false;
 							}
-							this.nextSibling.childNodes[0].style.display = "none";
+							this.childNodes[1].childNodes[0].style.display = "none";
 						}
 						fastReplyPoint.appendChild(createFastReplyBox());
 						fastReplyPoint.fastre = fastre;
@@ -401,14 +401,18 @@ function fastfarm(replyStr) {
 
 function createFastReplyBox() {
 	var box = document.createElement("div");
-	box.style.cssText = "height: 100px; width: 100px; display: none";
+	box.style.cssText = "width: 150px; display: none";
 	box.appendChild(createFastReplyItem("道理是这么个道理"));
 	box.appendChild(createFastReplyItem("妮说是就是"));
 	box.appendChild(createFastReplyItem("抽根烟，压压惊"));
+	box.appendChild(createFastReplyItem("关我pis"));
+	box.appendChild(createFastReplyItem("这个投票我就不参与了"));
+	box.appendChild(createFastReplyItem("半天说不出一句话"));
 	box.appendChild(createFastReplyItem("XNMBYY"));
 	box.appendChild(createFastReplyItem("妮为什么这么毒"));
 	box.appendChild(createFastReplyItem("这件事窝已经报警"));
 	box.appendChild(createFastReplyItem("建议永丰"));
+	box.appendChild(createFastReplyItem("ZZWDJS"));
 	box.onmouseout = function (e) {
 		if (isParent(e.relatedTarget, this.parentNode.parentNode)) {
 			return false;
