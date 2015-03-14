@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     2.0.0
+// @version     2.0.1
 // @grant       none
 // ==/UserScript==
 
@@ -39,7 +39,7 @@ var rrr = {
 	"\\*(照)": "裸$1",
 	"\\*(妇)": "淫$1",
 	"\\*(臣)": "奸$1",
-	"(任|可能|世界|历史|人|个|女|属|理|局限|专业|进攻|本|选择|关键|重要|习惯|灵|观赏|记|惰|理)\\*": "$1性"
+	"(任|可能|世界|历史|人|个|男|女|属|理|局限|专业|进攻|本|选择|关键|重要|习惯|灵|观赏|记|惰|理)\\*": "$1性"
 }
 
 var fastFormNames = ["fastpostform", "vfastpostform"];
@@ -407,12 +407,15 @@ function createFastReplyBox() {
 	box.appendChild(createFastReplyItem("抽根烟，压压惊"));
 	box.appendChild(createFastReplyItem("关我pis"));
 	box.appendChild(createFastReplyItem("这个投票我就不参与了"));
+	box.appendChild(createFastReplyItem("我选择死亡"));
 	box.appendChild(createFastReplyItem("半天说不出一句话"));
 	box.appendChild(createFastReplyItem("XNMBYY"));
+	box.appendChild(createFastReplyItem("脏是妮脏"));
 	box.appendChild(createFastReplyItem("妮为什么这么毒"));
 	box.appendChild(createFastReplyItem("这件事窝已经报警"));
 	box.appendChild(createFastReplyItem("建议永丰"));
-	box.appendChild(createFastReplyItem("ZZWDJS"));
+	box.appendChild(createFastReplyItem("ZZWDJS！！！"));
+	box.appendChild(createFastReplyItem("什么节奏"));
 	box.onmouseout = function (e) {
 		if (isParent(e.relatedTarget, this.parentNode.parentNode)) {
 			return false;
