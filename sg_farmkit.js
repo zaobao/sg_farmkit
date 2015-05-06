@@ -4,7 +4,7 @@
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     2.0.2
+// @version     2.0.3
 // @grant       none
 // ==/UserScript==
 
@@ -402,7 +402,11 @@ function fastfarm(replyStr) {
 function createFastReplyBox() {
 	var box = document.createElement("div");
 	box.style.cssText = "width: 150px; display: none";
+	box.appendChild(createFastReplyItem("油菜花"));
+	box.appendChild(createFastReplyItem("+1"));
+	box.appendChild(createFastReplyItem("就是这样"));
 	box.appendChild(createFastReplyItem("道理是这么个道理"));
+	box.appendChild(createFastReplyItem("卜是卜可以"));
 	box.appendChild(createFastReplyItem("妮说是就是"));
 	box.appendChild(createFastReplyItem("抽根烟，压压惊"));
 	box.appendChild(createFastReplyItem("关我pis"));
