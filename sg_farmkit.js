@@ -1,10 +1,10 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name        sg farmkit
 // @namespace   com.sgamer.bbs.farmkit
 // @description SG伐木助手
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     2.1.0
+// @version     2.1.1
 // @grant       none
 // ==/UserScript==
 
@@ -21,7 +21,8 @@ var pcrr = {
 	"裸": "&#x88F8;",
 	"仇": "&#x4EC7;",
 	"奸": "&#x5978;",
-	"淫": "&#x6DEB;"
+	"淫": "&#x6DEB;",
+	"进口": "&#x8FDB;&#x53E3;" 
 }
 
 var rrr = {
