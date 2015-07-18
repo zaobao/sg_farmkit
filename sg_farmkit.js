@@ -2,9 +2,10 @@
 // @name        sg farmkit
 // @namespace   com.sgamer.bbs.farmkit
 // @description SG伐木助手
+// @include     http://bbs.sgamer.com/forum-*.html
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     2.1.1
+// @version     2.9.9
 // @grant       none
 // ==/UserScript==
 
@@ -22,7 +23,8 @@ var pcrr = {
 	"仇": "&#x4EC7;",
 	"奸": "&#x5978;",
 	"淫": "&#x6DEB;",
-	"进口": "&#x8FDB;&#x53E3;" 
+	"江": "&#x6C5F;",
+	"进口": "&#x8FDB;&#x53E3;"
 }
 
 var rrr = {
@@ -40,6 +42,7 @@ var rrr = {
 	"\\*(照)": "裸$1",
 	"\\*(妇|荡)": "淫$1",
 	"\\*(臣)": "奸$1",
+	"\\*(苏)": "江$1",
 	"(任|可能|世界|历史|人|个|男|女|属|理|局限|专业|进攻|本|选择|关键|重要|习惯|灵|观赏|记|惰|理|品|惯|秉)\\*": "$1性"
 }
 
@@ -266,6 +269,79 @@ function setCookie (c_name, value, expiresecs) {
 function setTimeLimit() {
 	setCookie("SG_farmkit_ifPostTimeLimit", "1", 16);
 }
+
+if (new String(window.location).match("http://bbs.sgamer.com/forum")) {
+// 主题列表也处理开始
+
+window.previewFastFarm = function (tid, message) {
+	var form = document.getElementById("vfastpostform_" + tid);
+	var input = document.getElementById("vmessage_" + tid);
+	if (getCookie("SG_farmkit_ifPostTimeLimit")) {
+		onNeedMoreTime();
+		return;
+	}
+	input.value = precensore(recoverText(message));
+	setTimeLimit();
+	form.getElementsByTagName("button")[0].click();
+}
+
+window.previewThread = function(tid, tbody) {
+	if(!$('threadPreviewTR_'+tid)) {
+		appendscript(JSPATH + 'forum_viewthread.js?' + VERHASH);
+
+		newTr = document.createElement('tr');
+		newTr.id = 'threadPreviewTR_'+tid;
+		newTr.className = 'threadpre';
+		$(tbody).appendChild(newTr);
+		newTd = document.createElement('td');
+		newTd.colSpan = listcolspan;
+		newTd.className = 'threadpretd';
+		newTr.appendChild(newTd);
+		newTr.style.display = 'none';
+
+		previewTbody = tbody;
+		previewTid = tid;
+
+		newTd.innerHTML += '<div id="threadPreview_'+tid+'"></div>';
+		ajaxget('forum.php?mod=viewthread&tid='+tid+'&from=preview', 'threadPreview_'+tid, null, null, null, function() {
+			newTr.style.display = '';
+			var dls = document.getElementById("threadPreview_" + tid).getElementsByTagName("dl");
+			for (var i = 0; i < dls.length; i++) {
+				var msg = null;
+				var tds = dls[i].getElementsByTagName("td");
+				for (var j = 0; j < tds.length; j++) {
+					if (new String(tds[j].id).match("postmessage_")) {
+						msg = tds[j].textContent;
+					}
+				}
+				if (msg) {
+					var spans = dls[i].getElementsByTagName("span");
+					for (var k = 0; k < spans.length; k++) {
+						if (spans[k].className == "y xw0") {
+							var a = document.createElement("a");
+							a.innerHTML = "复制伐木";
+							a.style.cursor = "pointer";
+							a.tid = tid;
+							a.message = msg;
+							a.onclick = function () {
+								previewFastFarm(this.tid, this.message);
+							}
+							spans[k].insertBefore(a, spans[k].childNodes[0]);
+						}
+					}
+				}
+			}
+		});
+	} else {
+		$(tbody).removeChild($('threadPreviewTR_'+tid));
+		previewTbody = previewTid = null;
+	}
+}
+
+// 主题列表页处理结束
+} else {
+// 回帖页处理开始
+
 
 // 回复栏和快速回复栏
 (function () { 
@@ -497,6 +573,10 @@ function setTimeLimit() {
 		}
 	}
 })();
+
+// 回帖页处理结束
+}
+
 
 if (devmode) {
 	alert("耗时：" + (new Date().getTime() - timestamp.getTime()) + "毫秒");
