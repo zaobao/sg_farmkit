@@ -270,7 +270,7 @@ function setTimeLimit() {
 	setCookie("SG_farmkit_ifPostTimeLimit", "1", 16);
 }
 
-if (new String(window.location).match("http://bbs.sgamer.com/forum")) {
+if (new String(window.location).match("http://bbs.sgamer.com/forum-")) {
 // 主题列表也处理开始
 
 window.previewFastFarm = function (tid, message) {
