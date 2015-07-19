@@ -5,7 +5,7 @@
 // @include     http://bbs.sgamer.com/forum-*.html
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     2.9.9
+// @version     2.9.11
 // @grant       none
 // ==/UserScript==
 
@@ -87,6 +87,7 @@ function createFastReplyBox() {
 	box.appendChild(createFastReplyItem("这件事窝已经报警"));
 	box.appendChild(createFastReplyItem("建议永丰"));
 	box.appendChild(createFastReplyItem("ZZWDJS！！！"));
+	box.appendChild(createFastReplyItem("很急很关键！"));
 	box.appendChild(createFastReplyItem("什么节奏"));
 	box.onmouseout = function (e) {
 		if (isParent(e.relatedTarget, this.parentNode.parentNode)) {
@@ -109,6 +110,10 @@ function createFastReplyItem(str) {
 	item.onmouseover = function () {item.style.color = "green"}
 	item.onmouseout = function () {item.style.color = "gray"}
 	return item;
+}
+
+function createImageString(uri) {
+	return "[img]" + uri + "[/img]";
 }
 
 // 回复主题
@@ -572,6 +577,77 @@ window.previewThread = function(tid, tbody) {
 			}
 		}
 	}
+})();
+
+//表情新增
+(function () {
+	var firstTime = true;
+	document.getElementById("fastpostsml").onclick = function () {
+		showMenu({'ctrlid':this.id,'evt':'click','layer':2});
+		if (firstTime) {
+			smilies_type['_7'] = ['ob海鲜团', 'ob'];
+			smilies_array[7] = new Array();
+			smilies_array[7][1] = [
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193824uaoqp2gaintan1iq.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193824uaoqp2gaintan1iq.jpg.thumb.jpg','100','120','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193831n6wyyzu69yrlyzv5.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193831n6wyyzu69yrlyzv5.jpg.thumb.jpg','100','120','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193824fpwc3e1jxru7oect.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193824fpwc3e1jxru7oect.png.thumb.jpg','100','120','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193849xrm2tjmd8rp88prn.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193849xrm2tjmd8rp88prn.jpg.thumb.jpg','100','120','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193823dp4m5svo5dbhzpav.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193823dp4m5svo5dbhzpav.png.thumb.jpg','100','120','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193822eph3zpzd8mjna8ph.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193822eph3zpzd8mjna8ph.jpg.thumb.jpg','100','120','50']
+			];
+
+			var fastpostsmiliesdiv_tb_ul = document.getElementById("fastpostsmiliesdiv_tb").childNodes[0];
+			var fastpoststype_7 = document.createElement("li");
+			fastpoststype_7.id = "fastpoststype_7";
+			fastpoststype_7.onclick = function () {
+				smilies_switch('fastpostsmiliesdiv', '3', 7, 1, 'fastpost');
+				if(CURRENTSTYPE) {
+					$('fastpoststype_'+CURRENTSTYPE).className='';
+				}
+				this.className='current';
+				CURRENTSTYPE=7;
+				doane(event);
+			}
+			fastpostsmiliesdiv_tb_ul.appendChild(fastpoststype_7);
+			fastpoststype_7.innerHTML = "<a hidefocus=\"true\" href=\"javascript:;\">ob海鲜团</a>";
+
+			window.smilies_switch = function (id, smcols, type, page, seditorkey) {
+				page = page ? page : 1;
+				if(!smilies_array[type] || !smilies_array[type][page]) return;
+				setcookie('smile', type + 'D' + page, 31536000);
+				smiliesdata = '<table id="' + id + '_table" cellpadding="0" cellspacing="0"><tr>';
+				j = k = 0;
+				img = [];
+				for(var i = 0; i < smilies_array[type][page].length; i++) {
+					if(j >= smcols) {
+						smiliesdata += '<tr>';
+						j = 0;
+					}
+					s = smilies_array[type][page][i];
+					smilieimg = (type < 7 ? STATICURL + 'image/smiley/' + smilies_type['_' + type][1] + '/' : "") + s[2];
+					img[k] = new Image();
+					img[k].src = smilieimg;
+					smiliesdata += s && s[0] ? '<td onmouseover="smilies_preview(\'' + seditorkey + '\', \'' + id + '\', this, ' + s[5] + ')" onclick="' + (typeof wysiwyg != 'undefined' ? 'insertSmiley(' + s[0] + ')': 'seditor_insertunit(\'' + seditorkey + '\', \'' + s[1].replace(/'/, '\\\'') + '\')') +
+						'" id="' + seditorkey + 'smilie_' + s[0] + '_td"><img id="smilie_' + s[0] + '" width="' + s[3] +'" height="' + s[4] +'" src="' + smilieimg + '" alt="' + s[1] + '" />' : '<td>';
+					j++;k++;
+				}
+				smiliesdata += '</table>';
+				smiliespage = '';
+				if(smilies_array[type].length > 2) {
+					prevpage = ((prevpage = parseInt(page) - 1) < 1) ? smilies_array[type].length - 1 : prevpage;
+					nextpage = ((nextpage = parseInt(page) + 1) == smilies_array[type].length) ? 1 : nextpage;
+					smiliespage = '<div class="z"><a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + prevpage + ', \'' + seditorkey + '\');doane(event);">上页</a>' +
+						'<a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + nextpage + ', \'' + seditorkey + '\');doane(event);">下页</a></div>' +
+						page + '/' + (smilies_array[type].length - 1);
+				}
+				$(id + '_data').innerHTML = smiliesdata;
+				$(id + '_page').innerHTML = smiliespage;
+				$(id + '_tb').style.width = smcols*(16+parseInt(s[3])) + 'px';
+			};
+			firstTime = false;
+		}
+		return false;
+	};
 })();
 
 // 回帖页处理结束
