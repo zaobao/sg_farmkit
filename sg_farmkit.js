@@ -5,7 +5,7 @@
 // @include     http://bbs.sgamer.com/forum-*.html
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     2.9.11
+// @version     2.9.12
 // @grant       none
 // ==/UserScript==
 
@@ -593,14 +593,16 @@ window.previewThread = function(tid, tbody) {
 				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193824fpwc3e1jxru7oect.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193824fpwc3e1jxru7oect.png.thumb.jpg','100','120','50'],
 				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193849xrm2tjmd8rp88prn.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193849xrm2tjmd8rp88prn.jpg.thumb.jpg','100','120','50'],
 				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193823dp4m5svo5dbhzpav.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193823dp4m5svo5dbhzpav.png.thumb.jpg','100','120','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193822eph3zpzd8mjna8ph.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193822eph3zpzd8mjna8ph.jpg.thumb.jpg','100','120','50']
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193822eph3zpzd8mjna8ph.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193822eph3zpzd8mjna8ph.jpg.thumb.jpg','100','120','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193823gdzzdi7isugnluys.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193823gdzzdi7isugnluys.png.thumb.jpg','100','120','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/19/171241a779lhczjpq81zc7.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/19/171241a779lhczjpq81zc7.jpg.thumb.jpg','100','120','50']
 			];
 
 			var fastpostsmiliesdiv_tb_ul = document.getElementById("fastpostsmiliesdiv_tb").childNodes[0];
 			var fastpoststype_7 = document.createElement("li");
 			fastpoststype_7.id = "fastpoststype_7";
 			fastpoststype_7.onclick = function () {
-				smilies_switch('fastpostsmiliesdiv', '3', 7, 1, 'fastpost');
+				smilies_switch('fastpostsmiliesdiv', '4', 7, 1, 'fastpost');
 				if(CURRENTSTYPE) {
 					$('fastpoststype_'+CURRENTSTYPE).className='';
 				}
