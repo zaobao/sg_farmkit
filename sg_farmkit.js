@@ -5,7 +5,8 @@
 // @include     http://bbs.sgamer.com/forum-*.html
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
-// @version     2.9.12
+// @include     http://bbs.sgamer.com/*mod=forumdisplay*
+// @version     2.10.1
 // @grant       none
 // ==/UserScript==
 
@@ -23,8 +24,14 @@ var pcrr = {
 	"仇": "&#x4EC7;",
 	"奸": "&#x5978;",
 	"淫": "&#x6DEB;",
+	"毛": "&#x6BDB;",
+	"邓": "&#x9093;",
 	"江": "&#x6C5F;",
-	"进口": "&#x8FDB;&#x53E3;"
+	"胡": "&#x80E1;",
+	"习": "&#x4E60;",
+	"鸡巴": "&#x9E21;&#x5DF4;",
+	"进口": "&#x8FDB;&#x53E3;",
+	"电棍": "&#x7535;&#x68CD;"
 }
 
 var rrr = {
@@ -43,7 +50,9 @@ var rrr = {
 	"\\*(妇|荡)": "淫$1",
 	"\\*(臣)": "奸$1",
 	"\\*(苏)": "江$1",
-	"(任|可能|世界|历史|人|个|男|女|属|理|局限|专业|进攻|本|选择|关键|重要|习惯|灵|观赏|记|惰|理|品|惯|秉)\\*": "$1性"
+	"(瞎)\\**": "$1鸡巴",
+	"(任|可能|世界|历史|人|个|男|女|属|理|局限|专业|进攻|本|选择|关键|重要|习惯|灵|观赏|记|惰|理|品|惯|秉)\\*": "$1性",
+	"电\\**棍": "电棍"
 }
 
 var fastFormNames = ["fastpostform", "vfastpostform"];
@@ -275,7 +284,7 @@ function setTimeLimit() {
 	setCookie("SG_farmkit_ifPostTimeLimit", "1", 16);
 }
 
-if (new String(window.location).match("http://bbs.sgamer.com/forum-")) {
+if (new String(window.location).match("http://bbs.sgamer.com/forum-") || new String(window.location).match("mod=forumdisplay")) {
 // 主题列表也处理开始
 
 window.previewFastFarm = function (tid, message) {
