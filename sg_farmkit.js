@@ -6,7 +6,7 @@
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
 // @include     http://bbs.sgamer.com/*mod=forumdisplay*
-// @version     3.0.0
+// @version     3.0.1
 // @grant       none
 // ==/UserScript==
 
@@ -53,7 +53,8 @@ var rrr = {
 	"(瞎)\\*\\*": "$1鸡巴",
 	"(任|可能|世界|历史|人|个|男|女|属|理|局限|专业|进攻|本|选择|关键|重要|习惯|灵|观赏|记|惰|理|品|惯|秉|魔)\\*": "$1性",
 	"电\\*\\*棍": "电棍",
-	"信\\*\\*仰": "信仰"
+	"信\\*\\*仰": "信仰",
+	"命\\*\\*运": "命运"
 }
 
 var fastFormNames = ["fastpostform", "vfastpostform"];
