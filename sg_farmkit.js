@@ -6,7 +6,7 @@
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
 // @include     http://bbs.sgamer.com/*mod=forumdisplay*
-// @version     3.0.1
+// @version     3.0.2
 // @grant       none
 // ==/UserScript==
 
@@ -444,36 +444,6 @@ window.previewThread = function(tid, tbody) {
 						farmArchor.style.lineHeight = "16px";
 						farmArchor.style.padding = "0px 6px";
 						divs[j].appendChild(farmArchor);
-						divs[j].appendChild(document.createTextNode("\n"));
-						var span1 = document.createElement("span");
-						span1.className = "pipe";
-						span1.innerHTML = "|";
-						span1.style.cssFloat = "right";
-						span1.style.lineHeight = "16px";
-						span1.style.margin = "0px 2px";
-						divs[j].appendChild(span1);
-						var replyBox = document.createElement("span");
-						var replyArchor = document.createElement("span");
-						replyBox.appendChild(replyArchor);
-						replyArchor.innerHTML = "快速回复";
-						replyBox.style.cssText = "float: right; padding: 0px 6px;"
-						replyArchor.style.cssText = "color: green; cursor: pointer; line-height: 16px;";
-						divs[j].appendChild(replyBox);
-						var fastReplyPoint = document.createElement("div");
-						fastReplyPoint.style.cssText = "overflow-x: visible; overflow-y: visible; position: relative; height: 0px; width: 0px;"; 
-						replyBox.appendChild(fastReplyPoint);
-						replyBox.onmouseover = function () {
-							this.childNodes[1].childNodes[0].style.display = "block";
-						}
-						replyBox.onmouseout = function (e) {
-							if (isParent(e.relatedTarget, this)) {
-								return false;
-							}
-							this.childNodes[1].childNodes[0].style.display = "none";
-						}
-						fastReplyPoint.appendChild(createFastReplyBox());
-						divs[j].parentNode.parentNode.style.cssText = "overflow-x: visible; overflow-y: visible;";
-						fastReplyPoint.fastre = fastre;
 						farmArchor.divPElement = divs[j];
 						farmArchor.onclick = function () {
 							if (getCookie("SG_farmkit_ifPostTimeLimit")) {
@@ -513,35 +483,6 @@ window.previewThread = function(tid, tbody) {
 						farmArchor.innerHTML = "复制伐木";
 						farmArchor.style.cssText = "color: green; cursor: pointer; float: right; line-height: 16px; padding: 0px 6px; -moz-user-select:none; -webkit-user-select:none; user-select:none;";
 						divs[j].appendChild(farmArchor);
-						divs[j].appendChild(document.createTextNode("\n"));
-						var span1 = document.createElement("span");
-						span1.className = "pipe";
-						span1.innerHTML = "|";
-						span1.style.cssFloat = "right";
-						span1.style.lineHeight = "16px";
-						span1.style.margin = "0px 2px";
-						divs[j].appendChild(span1);
-						var replyBox = document.createElement("span");
-						var replyArchor = document.createElement("span");
-						replyBox.appendChild(replyArchor);
-						replyArchor.innerHTML = "快速回复";
-						replyBox.style.cssText = "float: right; padding: 0px 6px;"
-						replyArchor.style.cssText = "color: green; cursor: pointer; line-height: 16px;";
-						divs[j].appendChild(replyBox);
-						var fastReplyPoint = document.createElement("div");
-						fastReplyPoint.style.cssText = "overflow-x: visible; overflow-y: visible; position: relative; height: 0px; width: 0px;"; 
-						replyBox.appendChild(fastReplyPoint);
-						replyBox.onmouseover = function () {
-							this.childNodes[1].childNodes[0].style.display = "block";
-						}
-						replyBox.onmouseout = function (e) {
-							if (isParent(e.relatedTarget, this)) {
-								return false;
-							}
-							this.childNodes[1].childNodes[0].style.display = "none";
-						}
-						fastReplyPoint.appendChild(createFastReplyBox());
-						fastReplyPoint.fastre = fastre;
 						divs[j].parentNode.parentNode.style.cssText = "overflow-x: visible; overflow-y: visible;";
 						farmArchor.divPElement = divs[j];
 						farmArchor.onclick = function () {
@@ -608,17 +549,16 @@ window.previewThread = function(tid, tbody) {
 				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193823gdzzdi7isugnluys.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193823gdzzdi7isugnluys.png.thumb.jpg','100','120','50'],
 				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/19/171241a779lhczjpq81zc7.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/19/171241a779lhczjpq81zc7.jpg.thumb.jpg','100','120','50']
 			];
-
 			var fastpostsmiliesdiv_tb_ul = document.getElementById("fastpostsmiliesdiv_tb").childNodes[0];
 			var fastpoststype_7 = document.createElement("li");
 			fastpoststype_7.id = "fastpoststype_7";
 			fastpoststype_7.onclick = function () {
 				smilies_switch('fastpostsmiliesdiv', '4', 7, 1, 'fastpost');
-				if(CURRENTSTYPE) {
-					$('fastpoststype_'+CURRENTSTYPE).className='';
+				if(CURRENTTYPE) {
+					$('fastpoststype_'+CURRENTTYPE).className='';
 				}
 				this.className='current';
-				CURRENTSTYPE=7;
+				CURRENTTYPE=7;
 				doane(event);
 			}
 			fastpostsmiliesdiv_tb_ul.appendChild(fastpoststype_7);
