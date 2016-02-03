@@ -6,7 +6,7 @@
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
 // @include     http://bbs.sgamer.com/*mod=forumdisplay*
-// @version     3.0.2
+// @version     3.1.0
 // @grant       none
 // ==/UserScript==
 
@@ -398,6 +398,7 @@ window.previewThread = function(tid, tbody) {
 	var postNodes = postlist.childNodes;
 	for (var i = 0, isReply = 0; i < postNodes.length; i++) {
 		var postNode = postNodes[i];
+
 		if (postNode && 
 			postNode.getAttribute && 
 			postNode.getAttribute("id") && 
@@ -424,6 +425,7 @@ window.previewThread = function(tid, tbody) {
 				}
 			}
 			// 顶部
+			// 复制伐木
 			if (isReply == 1) {
 				var divs = postNode.getElementsByTagName("div");
 				for (var j = 0; j < divs.length; j++) {
@@ -455,7 +457,7 @@ window.previewThread = function(tid, tbody) {
 							for (var k = 0; k < tds.length; k++) {
 								if (tds[k].getAttribute("id").match("postmessage_")) {
 									replaceFace(tds[k]);
-									postText = (tds[k].innerText || tds[k].textContent || tds[k].text).replace(/^\s*/g, "");
+									postText = (tds[k].innerText || tds[k].textContent || tds[k].text || "").replace(/^\s*/g, "");
 									if (postText[0] == "\n") {
 										postText = postText.slice(1);
 									}
@@ -512,7 +514,7 @@ window.previewThread = function(tid, tbody) {
 							for (var k = 0; k < tds.length; k++) {
 								if (tds[k].getAttribute("id").match("postmessage_")) {
 									replaceFace(tds[k]);
-									postText = (tds[k].innerText || tds[k].textContent || tds[k].text)
+									postText = (tds[k].innerText || tds[k].textContent || tds[k].text || "")
 										.replace(/(^\s*)|(\s*$)/g, "").split("\n").pop();
 									if (postText[0] == "\n") {
 										postText = postText.slice(1);
@@ -526,6 +528,59 @@ window.previewThread = function(tid, tbody) {
 					}
 				}
 				isReply = 1;
+			}
+		}
+	}
+})();
+
+//签名复制
+(function () {
+	var signs = document.getElementsByClassName("sign");
+	for (var i = 0; i < signs.length; i++)
+	{
+		var signImages = signs[i].getElementsByTagName("img");
+		var signText = (signs[i].innerText || signs[i].textContent || signs[i].text || "").replace(/^\s*/g, "");
+		if (signImages.length > 0)
+		{
+			var imageCopy = document.createElement("a");
+			imageCopy.innerHTML = "复制签名图片";
+			imageCopy.style.color = "green";
+			imageCopy.style.cursor = "pointer";
+			imageCopy.style.cssFloat = "right";
+			imageCopy.style.lineHeight = "16px";
+			imageCopy.style.padding = "0px 6px";
+			imageCopy.signImages = signImages;
+			signs[i].appendChild(imageCopy);
+			imageCopy.onclick = function () {
+				if (getCookie("SG_farmkit_ifPostTimeLimit")) {
+					onNeedMoreTime();
+					return false;
+				}
+				var imgStr = "";
+				for (var j = 0; j < this.signImages.length; j++)
+				{
+					imgStr = imgStr + "[img=" + this.signImages[j].width + "," + this.signImages[j].height + "]" + this.signImages[j].src + "[/img]";
+				}
+				fastfarm(imgStr);
+			}
+		}
+		if (signText)
+		{
+			var textCopy = document.createElement("a");
+			textCopy.innerHTML = "复制签名文字";
+			textCopy.style.color = "green";
+			textCopy.style.cursor = "pointer";
+			textCopy.style.cssFloat = "right";
+			textCopy.style.lineHeight = "16px";
+			textCopy.style.padding = "0px 6px";
+			textCopy.signText = signText;
+			signs[i].appendChild(textCopy);
+			textCopy.onclick = function () {
+				if (getCookie("SG_farmkit_ifPostTimeLimit")) {
+					onNeedMoreTime();
+					return false;
+				}
+				fastfarm(this.signText);
 			}
 		}
 	}
