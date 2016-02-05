@@ -6,7 +6,7 @@
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
 // @include     http://bbs.sgamer.com/*mod=forumdisplay*
-// @version     3.1.0
+// @version     3.2.0
 // @grant       none
 // ==/UserScript==
 
@@ -604,9 +604,35 @@ window.previewThread = function(tid, tbody) {
 				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193823gdzzdi7isugnluys.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193823gdzzdi7isugnluys.png.thumb.jpg','100','120','50'],
 				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/19/171241a779lhczjpq81zc7.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/19/171241a779lhczjpq81zc7.jpg.thumb.jpg','100','120','50']
 			];
+			smilies_type['_8'] = ['b的微笑', 'bb'];
+			smilies_array[8] = new Array();
+			smilies_array[8][1] = [
+				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104114q7u4ljo617gyhhz7.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104114q7u4ljo617gyhhz7.jpg','20','20','50'],
+				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104114vh7imc77qcl6ist3.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104114vh7imc77qcl6ist3.jpg','20','20','50'],
+				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104113p8qppq4pqfrzq25p.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104113p8qppq4pqfrzq25p.jpg','20','20','50'],
+				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104113l2iihqqzawaxbaz2.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104113l2iihqqzawaxbaz2.jpg','20','20','50'],
+				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104112lg9rajxrgfqzee9g.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104112lg9rajxrgfqzee9g.jpg','20','20','50'],
+				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104111iigmgdzmzmnvrq6a.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104111iigmgdzmzmnvrq6a.jpg','20','20','50'],
+				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104111xbrza7naxnka8az8.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104111xbrza7naxnka8az8.jpg','20','20','50'],
+				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104110ejzp1ojoppfxo90j.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104110ejzp1ojoppfxo90j.jpg','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104109lpwi60qi8se26nim.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104109lpwi60qi8se26nim.jpg','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104108uq801666v0ko18jv.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104108uq801666v0ko18jv.jpg','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104108fme8n8ls1qknnmeh.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104108fme8n8ls1qknnmeh.jpg','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104107fzwjjanruz9z8lwr.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104107fzwjjanruz9z8lwr.gif','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104057pmqcwicmpnucyhcm.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104057pmqcwicmpnucyhcm.jpg.thumb.jpg','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104057lllwhumim9ov99sx.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104057lllwhumim9ov99sx.jpg.thumb.jpg','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104057qaal9acag0oladxx.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104057qaal9acag0oladxx.gif','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104057ez8mmak8nammnl8t.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104057ez8mmak8nammnl8t.gif','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104056w3hq509re76a0rr7.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104056w3hq509re76a0rr7.jpg.thumb.jpg','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104056h5yapwausfig5rsh.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104056h5yapwausfig5rsh.gif','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104055jpu3bjpc6gsjcufu.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104055jpu3bjpc6gsjcufu.gif','20','20','50'],
+				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104054ti2iycc51qu5p95z.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104054ti2iycc51qu5p95z.gif','20','20','50']
+			];
 			var fastpostsmiliesdiv_tb_ul = document.getElementById("fastpostsmiliesdiv_tb").childNodes[0];
 			var fastpoststype_7 = document.createElement("li");
+			var fastpoststype_8 = document.createElement("li");
 			fastpoststype_7.id = "fastpoststype_7";
+			fastpoststype_8.id = "fastpoststype_8";
 			fastpoststype_7.onclick = function () {
 				smilies_switch('fastpostsmiliesdiv', '4', 7, 1, 'fastpost');
 				if(CURRENTTYPE) {
@@ -616,9 +642,19 @@ window.previewThread = function(tid, tbody) {
 				CURRENTTYPE=7;
 				doane(event);
 			}
+			fastpoststype_8.onclick = function () {
+				smilies_switch('fastpostsmiliesdiv', '8', 8, 1, 'fastpost');
+				if(CURRENTTYPE) {
+					$('fastpoststype_'+CURRENTTYPE).className='';
+				}
+				this.className='current';
+				CURRENTTYPE=8;
+				doane(event);
+			}
 			fastpostsmiliesdiv_tb_ul.appendChild(fastpoststype_7);
+			fastpostsmiliesdiv_tb_ul.appendChild(fastpoststype_8);
 			fastpoststype_7.innerHTML = "<a hidefocus=\"true\" href=\"javascript:;\">ob海鲜团</a>";
-
+			fastpoststype_8.innerHTML = "<a hidefocus=\"true\" href=\"javascript:;\">b的微笑</a>";
 			window.smilies_switch = function (id, smcols, type, page, seditorkey) {
 				page = page ? page : 1;
 				if(!smilies_array[type] || !smilies_array[type][page]) return;
