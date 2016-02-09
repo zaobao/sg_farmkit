@@ -6,7 +6,7 @@
 // @include     http://bbs.sgamer.com/thread-*.html
 // @include     http://bbs.sgamer.com/*mod=viewthread*
 // @include     http://bbs.sgamer.com/*mod=forumdisplay*
-// @version     3.2.0
+// @version     3.3.0
 // @grant       none
 // ==/UserScript==
 
@@ -14,6 +14,9 @@ var devmode = false;
 if (devmode) {
 	var timestamp = new Date();
 }
+
+// iframe不会触发
+if (window == window.top) {
 
 var pcrr = {
 	"枪": "&#x67AA;",
@@ -31,6 +34,7 @@ var pcrr = {
 	"习": "&#x4E60;",
 	"鸡巴": "&#x9E21;&#x5DF4;",
 	"进口": "&#x8FDB;&#x53E3;",
+	"轮子": "&#x8F6E;&#x5B50;",
 	"电棍": "&#x7535;&#x68CD;"
 }
 
@@ -49,8 +53,10 @@ var rrr = {
 	"\\*(照)": "裸$1",
 	"\\*(妇|荡)": "淫$1",
 	"\\*(臣)": "奸$1",
-	"\\*(苏)": "江$1",
+	"\\*(苏|湖|西)": "江$1",
 	"(瞎)\\*\\*": "$1鸡巴",
+	"\\*(惯)": "习$1",
+	"\\*\\*(妈)": "轮子$1",
 	"(任|可能|世界|历史|人|个|男|女|属|理|局限|专业|进攻|本|选择|关键|重要|习惯|灵|观赏|记|惰|理|品|惯|秉|魔)\\*": "$1性",
 	"电\\*\\*棍": "电棍",
 	"信\\*\\*仰": "信仰",
@@ -59,8 +65,7 @@ var rrr = {
 
 var fastFormNames = ["fastpostform", "vfastpostform"];
 
-function createCommentButtonByReplyButton(fastre)
-{
+function createCommentButtonByReplyButton(fastre) {
 	var a = document.createElement("a");
 	a.className = "cmmnt";
 	a.onclick = function () {
@@ -76,51 +81,6 @@ function createCommentButtonByReplyButton(fastre)
 	a.href = "forum.php?mod=misc&action=comment&tid=12360082&pid=30553315&extra=page%3D1&page=1";
 	a.appendChild(document.createTextNode("点评"));
 	return a;
-}
-
-function createFastReplyBox() {
-	var box = document.createElement("div");
-	box.style.cssText = "width: 150px; display: none";
-	box.appendChild(createFastReplyItem("油菜花"));
-	box.appendChild(createFastReplyItem("+1"));
-	box.appendChild(createFastReplyItem("就是这样"));
-	box.appendChild(createFastReplyItem("道理是这么个道理"));
-	box.appendChild(createFastReplyItem("卜是卜可以"));
-	box.appendChild(createFastReplyItem("妮说是就是"));
-	box.appendChild(createFastReplyItem("抽根烟，压压惊"));
-	box.appendChild(createFastReplyItem("关我pis"));
-	box.appendChild(createFastReplyItem("这个投票我就不参与了"));
-	box.appendChild(createFastReplyItem("我选择死亡"));
-	box.appendChild(createFastReplyItem("半天说不出一句话"));
-	box.appendChild(createFastReplyItem("XNMBYY"));
-	box.appendChild(createFastReplyItem("脏是妮脏"));
-	box.appendChild(createFastReplyItem("妮为什么这么毒"));
-	box.appendChild(createFastReplyItem("这件事窝已经报警"));
-	box.appendChild(createFastReplyItem("建议永丰"));
-	box.appendChild(createFastReplyItem("ZZWDJS！！！"));
-	box.appendChild(createFastReplyItem("很急很关键！"));
-	box.appendChild(createFastReplyItem("什么节奏"));
-	box.onmouseout = function (e) {
-		if (isParent(e.relatedTarget, this.parentNode.parentNode)) {
-			return false;
-		}
-		this.style.display = "none";
-	}
-	return box;
-}
-
-function createFastReplyItem(str) {
-	var item = document.createElement("div");
-	item.appendChild(document.createTextNode(str));
-	item.style.cursor = "pointer";
-	item.style.color = "gray";
-	item.onclick = function () {
-		this.parentNode.style.display = "none";
-		replyFarm(this.parentNode.parentNode.fastre.href, this.innerHTML);
-	}
-	item.onmouseover = function () {item.style.color = "green"}
-	item.onmouseout = function () {item.style.color = "gray"}
-	return item;
 }
 
 function createImageString(uri) {
@@ -256,26 +216,6 @@ function replaceFace(e) {
 	}
 }
 
-function replyFarm(url, str) {
-	if (getCookie("SG_farmkit_ifPostTimeLimit")) {
-		onNeedMoreTime();
-		return;
-	}
-	var reply_box = document.createElement("div");
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET", url + "&infloat=yes&handlekey=reply&inajax=1&ajaxtarget=fwin_content_reply",true);
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-			reply_box.innerHTML = xmlhttp.responseXML.documentElement.childNodes[0].data;
-			document.getElementById("postform").message.value = precensore(recoverText(str));
-			setTimeLimit();
-			document.getElementById("postform").submit();
-		}
-	}
-	xmlhttp.send();
-	document.body.appendChild(reply_box);
-}
-
 function setCookie (c_name, value, expiresecs) {
 	var exdate = new Date();
 	exdate.setSeconds(exdate.getSeconds() + expiresecs);
@@ -355,7 +295,7 @@ window.previewThread = function(tid, tbody) {
 }
 
 // 主题列表页处理结束
-} else {
+} else if ((new String(window.location).match("http://bbs.sgamer.com/thread-") || new String(window.location).match("mod=viewthread"))) {
 // 回帖页处理开始
 
 
@@ -586,115 +526,10 @@ window.previewThread = function(tid, tbody) {
 	}
 })();
 
-//表情新增
-(function () {
-	var firstTime = true;
-	document.getElementById("fastpostsml").onclick = function () {
-		showMenu({'ctrlid':this.id,'evt':'click','layer':2});
-		if (firstTime) {
-			smilies_type['_7'] = ['ob海鲜团', 'ob'];
-			smilies_array[7] = new Array();
-			smilies_array[7][1] = [
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193824uaoqp2gaintan1iq.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193824uaoqp2gaintan1iq.jpg.thumb.jpg','100','120','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193831n6wyyzu69yrlyzv5.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193831n6wyyzu69yrlyzv5.jpg.thumb.jpg','100','120','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193824fpwc3e1jxru7oect.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193824fpwc3e1jxru7oect.png.thumb.jpg','100','120','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193849xrm2tjmd8rp88prn.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193849xrm2tjmd8rp88prn.jpg.thumb.jpg','100','120','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193823dp4m5svo5dbhzpav.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193823dp4m5svo5dbhzpav.png.thumb.jpg','100','120','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193822eph3zpzd8mjna8ph.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193822eph3zpzd8mjna8ph.jpg.thumb.jpg','100','120','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/18/193823gdzzdi7isugnluys.png.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/18/193823gdzzdi7isugnluys.png.thumb.jpg','100','120','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201507/19/171241a779lhczjpq81zc7.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201507/19/171241a779lhczjpq81zc7.jpg.thumb.jpg','100','120','50']
-			];
-			smilies_type['_8'] = ['b的微笑', 'bb'];
-			smilies_array[8] = new Array();
-			smilies_array[8][1] = [
-				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104114q7u4ljo617gyhhz7.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104114q7u4ljo617gyhhz7.jpg','20','20','50'],
-				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104114vh7imc77qcl6ist3.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104114vh7imc77qcl6ist3.jpg','20','20','50'],
-				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104113p8qppq4pqfrzq25p.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104113p8qppq4pqfrzq25p.jpg','20','20','50'],
-				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104113l2iihqqzawaxbaz2.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104113l2iihqqzawaxbaz2.jpg','20','20','50'],
-				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104112lg9rajxrgfqzee9g.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104112lg9rajxrgfqzee9g.jpg','20','20','50'],
-				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104111iigmgdzmzmnvrq6a.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104111iigmgdzmzmnvrq6a.jpg','20','20','50'],
-				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104111xbrza7naxnka8az8.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104111xbrza7naxnka8az8.jpg','20','20','50'],
-				['bb_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104110ejzp1ojoppfxo90j.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104110ejzp1ojoppfxo90j.jpg','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104109lpwi60qi8se26nim.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104109lpwi60qi8se26nim.jpg','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104108uq801666v0ko18jv.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104108uq801666v0ko18jv.jpg','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104108fme8n8ls1qknnmeh.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104108fme8n8ls1qknnmeh.jpg','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104107fzwjjanruz9z8lwr.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104107fzwjjanruz9z8lwr.gif','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104057pmqcwicmpnucyhcm.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104057pmqcwicmpnucyhcm.jpg.thumb.jpg','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104057lllwhumim9ov99sx.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104057lllwhumim9ov99sx.jpg.thumb.jpg','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104057qaal9acag0oladxx.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104057qaal9acag0oladxx.gif','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104057ez8mmak8nammnl8t.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104057ez8mmak8nammnl8t.gif','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104056w3hq509re76a0rr7.jpg.thumb.jpg[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104056w3hq509re76a0rr7.jpg.thumb.jpg','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104056h5yapwausfig5rsh.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104056h5yapwausfig5rsh.gif','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104055jpu3bjpc6gsjcufu.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104055jpu3bjpc6gsjcufu.gif','20','20','50'],
-				['ob_0', '[img]http://fj2.sgamer.com/attachments/album/201602/05/104054ti2iycc51qu5p95z.gif[/img]','http://fj2.sgamer.com/attachments/album/201602/05/104054ti2iycc51qu5p95z.gif','20','20','50']
-			];
-			var fastpostsmiliesdiv_tb_ul = document.getElementById("fastpostsmiliesdiv_tb").childNodes[0];
-			var fastpoststype_7 = document.createElement("li");
-			var fastpoststype_8 = document.createElement("li");
-			fastpoststype_7.id = "fastpoststype_7";
-			fastpoststype_8.id = "fastpoststype_8";
-			fastpoststype_7.onclick = function () {
-				smilies_switch('fastpostsmiliesdiv', '4', 7, 1, 'fastpost');
-				if(CURRENTTYPE) {
-					$('fastpoststype_'+CURRENTTYPE).className='';
-				}
-				this.className='current';
-				CURRENTTYPE=7;
-				doane(event);
-			}
-			fastpoststype_8.onclick = function () {
-				smilies_switch('fastpostsmiliesdiv', '8', 8, 1, 'fastpost');
-				if(CURRENTTYPE) {
-					$('fastpoststype_'+CURRENTTYPE).className='';
-				}
-				this.className='current';
-				CURRENTTYPE=8;
-				doane(event);
-			}
-			fastpostsmiliesdiv_tb_ul.appendChild(fastpoststype_7);
-			fastpostsmiliesdiv_tb_ul.appendChild(fastpoststype_8);
-			fastpoststype_7.innerHTML = "<a hidefocus=\"true\" href=\"javascript:;\">ob海鲜团</a>";
-			fastpoststype_8.innerHTML = "<a hidefocus=\"true\" href=\"javascript:;\">b的微笑</a>";
-			window.smilies_switch = function (id, smcols, type, page, seditorkey) {
-				page = page ? page : 1;
-				if(!smilies_array[type] || !smilies_array[type][page]) return;
-				setcookie('smile', type + 'D' + page, 31536000);
-				smiliesdata = '<table id="' + id + '_table" cellpadding="0" cellspacing="0"><tr>';
-				j = k = 0;
-				img = [];
-				for(var i = 0; i < smilies_array[type][page].length; i++) {
-					if(j >= smcols) {
-						smiliesdata += '<tr>';
-						j = 0;
-					}
-					s = smilies_array[type][page][i];
-					smilieimg = (type < 7 ? STATICURL + 'image/smiley/' + smilies_type['_' + type][1] + '/' : "") + s[2];
-					img[k] = new Image();
-					img[k].src = smilieimg;
-					smiliesdata += s && s[0] ? '<td onmouseover="smilies_preview(\'' + seditorkey + '\', \'' + id + '\', this, ' + s[5] + ')" onclick="' + (typeof wysiwyg != 'undefined' ? 'insertSmiley(' + s[0] + ')': 'seditor_insertunit(\'' + seditorkey + '\', \'' + s[1].replace(/'/, '\\\'') + '\')') +
-						'" id="' + seditorkey + 'smilie_' + s[0] + '_td"><img id="smilie_' + s[0] + '" width="' + s[3] +'" height="' + s[4] +'" src="' + smilieimg + '" alt="' + s[1] + '" />' : '<td>';
-					j++;k++;
-				}
-				smiliesdata += '</table>';
-				smiliespage = '';
-				if(smilies_array[type].length > 2) {
-					prevpage = ((prevpage = parseInt(page) - 1) < 1) ? smilies_array[type].length - 1 : prevpage;
-					nextpage = ((nextpage = parseInt(page) + 1) == smilies_array[type].length) ? 1 : nextpage;
-					smiliespage = '<div class="z"><a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + prevpage + ', \'' + seditorkey + '\');doane(event);">上页</a>' +
-						'<a href="javascript:;" onclick="smilies_switch(\'' + id + '\', \'' + smcols + '\', ' + type + ', ' + nextpage + ', \'' + seditorkey + '\');doane(event);">下页</a></div>' +
-						page + '/' + (smilies_array[type].length - 1);
-				}
-				$(id + '_data').innerHTML = smiliesdata;
-				$(id + '_page').innerHTML = smiliespage;
-				$(id + '_tb').style.width = smcols*(16+parseInt(s[3])) + 'px';
-			};
-			firstTime = false;
-		}
-		return false;
-	};
-})();
-
 // 回帖页处理结束
+}
+
+// iframe不会触发
 }
 
 
